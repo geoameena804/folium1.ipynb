@@ -1,0 +1,280 @@
+🌍 Interactive Web Mapping using Python & Folium (Google Colab)
+Recently, I explored interactive web mapping using Python’s Folium library in Google Colab, focusing on building maps with multiple basemaps and vector features.
+🔧 Tools & Technologies Used
+Language: Python
+Environment: Google Colab
+Libraries: Folium (Leaflet.js wrapper)
+Basemap Source: OpenStreetMap
+🧭 Workflow & Process
+Installed Folium in Google Colab using pip.
+Created a base map centered over India using latitude & longitude.
+Added OpenStreetMap as a basemap, which automatically loads and zooms into the selected location.
+Implemented multiple basemaps:
+Standard OpenStreetMap
+Breton OpenStreetMap
+ (with LayerControl to switch between them)
+Added point features (Markers) for major Indian cities:
+-->Delhi
+-->Bengaluru
+-->Lucknow
+-->Indore
+-->Jammu & Kashmir
+ Each marker was styled with different colors and popups.
+Added vector layers:
+🔴 Circle to highlight an area of interest
+➖ Polyline to represent a route/connection
+🔺 Polygon to show an area boundary
+Used fit_bounds() to automatically zoom the map to all added features.
+Exported interactive maps as HTML files, making them easy to share and embed on the web.
+📌 Key Learning
+Folium makes it easy to convert Python code into interactive Leaflet web maps
+Multiple basemaps and layers can be managed efficiently
+Ideal for GIS visualization, spatial analysis demos, and web GIS projects
+This exercise strengthened my understanding of Python-based GIS visualization and interactive mapping workflows.
+📍 Looking forward to exploring more advanced GIS integrations with Python!
+hashtag#Python hashtag#Folium hashtag#GIS hashtag#WebMapping hashtag#OpenStreetMap hashtag#Leaflet hashtag#GoogleColab hashtag#SpatialData hashtag#Geospatial hashtag#DataVisualization
+
+!pip install folium
+
+import folium
+m = folium.Map(location=[20.5937,78.9629], zoom_start=5)
+
+#map gives basemap within that it will zoom in to india location(it will be open street map)
+
+m.save('basic_map.html')
+print('Basic map created and saved')
+
+#creating marker in a location
+
+m = folium.Map(location = [20.5937, 78.9629], zoom_start = 5)
+
+#add marker
+folium.Marker(location = [11.1271, 78.6569], popup = 'TamilNadu').add_to(m)
+folium.Marker(location=[12.9716, 77.5946], popup='bengaluru').add_to(m)
+folium.Marker(location=[26.2006, 92.9376], popup='Assam').add_to(m)
+folium.Marker(location=[19.0760, 72.8777], popup='mumbai').add_to(m)
+folium.Marker(location=[22.5744, 88.3629], popup='kolkata').add_to(m)
+folium.Marker(location=[28.7041, 77.1025], popup='delhi').add_to(m)
+
+
+
+
+m.save('marker_map.html')
+print('Basic map created and saved')
+
+#change marker color
+
+m = folium.Map(location=[20.5937,78.9629], zoom_start=5)
+
+#add custom markers
+
+folium.Marker(location=[28.7041, 77.1025],tooltip="Click me!", popup='Delhi',icon=folium.Icon(color='purple',icon="cloud")).add_to(m)
+folium.Marker(location=[12.9716, 77.5946],tooltip="Click me!", popup='Bengaluru',icon=folium.Icon(color='red',icon="rainbow")).add_to(m)
+folium.Marker(location=[11.1271, 78.6569],tooltip="Click me!", popup='TamilNadu',icon=folium.Icon(color='green',icon="water")).add_to(m)
+folium.Marker(location=[26.2006, 92.9376],tooltip="Click me!", popup='Assam',icon=folium.Icon(color='black',icon="forest")).add_to(m)
+folium.Marker(location=[33.2778, 75.3412],tooltip="Click me!", popup='Jammu kashmir',icon=folium.Icon(color='blue',icon="snow")).add_to(m)
+folium.Marker(location=[19.0760, 72.8777],tooltip="Click me!", popup='mumbai',icon=folium.Icon(color='blue',icon="build")).add_to(m)
+
+m.save('custom_marker_map.html')
+print('Basic map created and saved')
+
+import folium
+
+# Create a map
+m = folium.Map(location=[20.5937, 78.9629], zoom_start=5)
+
+# Add a marker
+marker = folium.Marker(
+    location=[20.5937, 78.9629],  # Coordinates for the marker
+    popup="This is India!",      # Popup text
+    tooltip="Click me!",         # Tooltip text
+    icon=folium.Icon(icon="info-sign", color="green")  # Custom icon
+    # icon = folium.Icon(icon=" ", color="blue")
+
+)
+
+# Add the marker to the map
+marker.add_to(m)
+
+# Save the map to an HTML file or display it in a Jupyter Notebook
+m.save("map_with_marker.html")
+
+#changing basemap
+# Add tile layers
+tile1 = folium.TileLayer(
+    tiles='https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    name='Standard OpenStreetMap',
+    attr='OpenStreetMap'
+).add_to(m)
+
+tile2 = folium.TileLayer(
+    tiles='https://tile.openstreetmap.bzh/br/{z}/{x}/{y}.png',
+    name='Breton OpenStreetMap',
+    attr='OpenStreetMap Breizh'
+).add_to(m)
+m = folium.Map(tiles=tile1, attr='My Data Attribution')
+
+folium.Marker(location=[28.7041, 77.1025], popup='Delhi',icon=folium.Icon(color='purple')).add_to(m)
+folium.Marker(location=[12.9716, 77.5946], popup='Bengaluru',icon=folium.Icon(color='red')).add_to(m)
+folium.Marker(location=[26.8467, 80.9462], popup='Lucknow',icon=folium.Icon(color='green')).add_to(m)
+folium.Marker(location=[22.7196, 75.8577], popup='Indore',icon=folium.Icon(color='black')).add_to(m)
+folium.Marker(location=[33.2778, 75.3412], popup='Jammu kashmir',icon=folium.Icon(color='blue')).add_to(m)
+
+#add circle
+folium.Circle(
+    radius=10000,
+    location=[28.7041, 77.1025],
+    popup='Delhi',
+    color='red',
+    fill=True,
+).add_to(m)
+
+# Fit map to bounds of all features (circle and line)
+bounds = [
+    [33.2778, 75.3412],  # JK Circle
+    [25.7041, 71.1025],  # Line start
+    [20.0760, 75.8777],# Line end
+    [12.9716, 77.5946], # Bengaluru Circle
+    [26.8467, 80.9462],  # Lucknow Circle
+    [22.7196, 75.8577]  #indore circle
+]
+m.fit_bounds(bounds)
+m.save('circle_marker_map.html')
+
+#adding line
+folium.PolyLine(locations=[(25.7041,71.1025),(20.0760,75.8777)],color='red', weight=5).add_to(m)
+
+bounds = [
+    [25.7041,71.1025],
+    [20.0760,75.8777],
+]
+m.fit_bounds(bounds)
+
+m.save('line_map.html')
+print('Basic map created and saved')
+
+#adding polygon
+
+folium.Polygon(locations=[(25.7041,71.1025),(20.0760,75.8777),(12.9716,77.5946)],color='red', fill=True).add_to(m)
+
+bounds = [
+    [25.7041,71.1025],
+    [20.0760,75.8777],
+    [12.9716,77.5946]
+]
+m.fit_bounds(bounds)
+
+m.save('polygon_map.html')
+print('Basic map created and saved')
+
+#add layers control
+
+folium.LayerControl().add_to(m)
+
+m.save('layer_control_map.html')
+print('Basic map created and saved')
+
+import folium
+
+# Initialize the map without a default tile layer
+m = folium.Map(location=[28.7041, 77.1025], zoom_start=5, tiles=None)
+
+# Add the first tile layer (Standard OpenStreetMap)
+folium.TileLayer(
+    tiles='https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    name='Standard OpenStreetMap',
+    attr='OpenStreetMap'
+).add_to(m)
+
+# Add the second tile layer (Breton OpenStreetMap)
+folium.TileLayer(
+    tiles='https://tile.openstreetmap.bzh/br/{z}/{x}/{y}.png',
+    name='Breton OpenStreetMap',
+    attr='OpenStreetMap Breizh'
+).add_to(m)
+
+# Add markers
+folium.Marker(location=[28.7041, 77.1025], popup='Delhi', icon=folium.Icon(color='purple')).add_to(m)
+folium.Marker(location=[12.9716, 77.5946], popup='Bengaluru', icon=folium.Icon(color='red')).add_to(m)
+folium.Marker(location=[26.8467, 80.9462], popup='Lucknow', icon=folium.Icon(color='green')).add_to(m)
+folium.Marker(location=[22.7196, 75.8577], popup='Indore', icon=folium.Icon(color='black')).add_to(m)
+folium.Marker(location=[33.2778, 75.3412], popup='Jammu & Kashmir', icon=folium.Icon(color='blue')).add_to(m)
+
+# Add circle
+folium.Circle(
+    radius=10000,
+    location=[28.7041, 77.1025],
+    popup='Delhi',
+    color='red',
+    fill=True,
+).add_to(m)
+
+# Fit map to bounds of all features
+bounds = [
+    [33.2778, 75.3412],  # Jammu & Kashmir
+    [28.7041, 77.1025],  # Delhi
+    [12.9716, 77.5946],  # Bengaluru
+    [26.8467, 80.9462],  # Lucknow
+    [22.7196, 75.8577]   # Indore
+]
+m.fit_bounds(bounds)
+
+# Add LayerControl to allow toggling between tile layers
+folium.LayerControl().add_to(m)
+
+# Save the map
+m.save('layer_control_map.html')
+print('Map with distinct tile layers created and saved')
+
+import folium
+
+# Initialize the map without a default tile layer
+m = folium.Map(location=[28.7041, 77.1025], zoom_start=5, tiles=None)
+
+# Add the first tile layer (Standard OpenStreetMap)
+folium.TileLayer(
+    tiles='https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    name='Standard OpenStreetMap',
+    attr='OpenStreetMap'
+).add_to(m)
+
+# Add the second tile layer (Breton OpenStreetMap)
+folium.TileLayer(
+    tiles='https://tile.openstreetmap.bzh/br/{z}/{x}/{y}.png',
+    name='Breton OpenStreetMap',
+    attr='OpenStreetMap Breizh'
+).add_to(m)
+
+# Add markers
+folium.Marker(location=[28.7041, 77.1025], popup='Delhi', icon=folium.Icon(color='purple')).add_to(m)
+folium.Marker(location=[12.9716, 77.5946], popup='Bengaluru', icon=folium.Icon(color='red')).add_to(m)
+folium.Marker(location=[26.8467, 80.9462], popup='Lucknow', icon=folium.Icon(color='green')).add_to(m)
+folium.Marker(location=[22.7196, 75.8577], popup='Indore', icon=folium.Icon(color='black')).add_to(m)
+folium.Marker(location=[33.2778, 75.3412], popup='Jammu & Kashmir', icon=folium.Icon(color='blue')).add_to(m)
+
+# Add circle
+folium.Circle(
+    radius=10000,
+    location=[28.7041, 77.1025],
+    popup='Delhi',
+    color='red',
+    fill=True,
+).add_to(m)
+
+# Fit map to bounds of all features
+bounds = [
+    [33.2778, 75.3412],  # Jammu & Kashmir
+    [28.7041, 77.1025],  # Delhi
+    [12.9716, 77.5946],  # Bengaluru
+    [26.8467, 80.9462],  # Lucknow
+    [22.7196, 75.8577]   # Indore
+]
+m.fit_bounds(bounds)
+
+# Add LayerControl to allow toggling between tile layers
+folium.LayerControl().add_to(m)
+
+# Save the map
+m.save('layer_control_map.html')
+print('Map with distinct tile layers created and saved')
+
